@@ -15,7 +15,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        $products =  Product::all();
+        return response()->json($products, 200);
     }
 
     /**
@@ -27,6 +28,8 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        $product =  Product::create($request->all());
+        return response()->json(null, 201);
     }
 
     /**
@@ -37,7 +40,8 @@ class ProductController extends Controller
      */
     public function show($slug)
     {
-        return Product::where('slug', '=', $slug)->first();
+        $product =  Product::where('slug', '=', $slug)->first();
+        return response()->json($product, 200);
     }
 
     /**
@@ -49,7 +53,10 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::findOrFail($id);
+        $product->update($request->all());
+
+        return response()->json($product, 200);
     }
 
     /**
@@ -60,6 +67,9 @@ class ProductController extends Controller
      */
     public function destroy($slug)
     {
-        //
+        $product = Product::where('slug', '=', $slug)->first();
+        $product->delete();
+
+        return response()->json(null, 204);;
     }
 }
